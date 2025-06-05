@@ -1,0 +1,117 @@
+"$schema": "https://github.com/hyperledger-labs/fablo/releases/download/2.0.0/schema.json"
+global:
+  fabricVersion: "2.5.10"
+  tls: true
+  monitoring:
+    loglevel: debug
+orgs:
+  - organization:
+      name: Orderer1
+      domain: orderer1.realestate.com
+    orderers:
+      - groupName: group1
+        type: raft
+        instances: 3
+  - organization:
+      name: user
+      domain: user.realestate.com
+    peer:
+      instances: 2
+      db: CouchDb
+    tools: {}
+  - organization:
+      name: bank
+      domain: bank.realestate.com
+    peer:
+      instances: 2
+      db: CouchDb
+    tools: {}
+  - organization:
+      name: landauthority
+      domain: landauthority.realestate.com
+    peer:
+      instances: 2
+      db: CouchDb
+    tools: {}
+  - organization:
+      name: court
+      domain: court.realestate.com
+    peer:
+      instances: 2
+      db: CouchDb
+    tools: {}
+  - organization:
+      name: inspector
+      domain: inspector.realestate.com
+    peer:
+      instances: 2
+      db: CouchDb
+    tools: {}
+
+channels:
+  - name: main-channel
+    orgs:
+      - name: user
+        peers:
+          - peer0
+          - peer1        
+      - name: bank
+        peers:
+          - peer0
+          - peer1
+      - name: landauthority
+        peers:
+          - peer0
+          - peer1
+      - name: court
+        peers:
+          - peer0
+          - peer1
+      - name: inspector
+        peers:
+          - peer0
+          - peer1
+  - name: verification-channel
+    orgs:
+      - name: bank
+        peers:
+          - peer0
+      - name: landauthority
+        peers:
+          - peer0
+      - name: court
+        peers:
+          - peer0
+
+
+chaincodes:
+  - name: auth-cc
+    version: 0.0.3
+    lang: node
+    channel: main-channel
+    init: '{"Args":[]}'
+    endorsement: "OR('userMSP.member','landauthorityMSP.member', 'bankMSP.member', 'courtMSP.member','inspectorMSP.member')"
+    directory: "./chaincodes/auth-chaincode"
+  - name: Asset-cc
+    version: 0.0.3
+    lang: node
+    channel: main-channel
+    init: '{"Args":[]}'
+    endorsement: "OR('userMSP.member','landauthorityMSP.member', 'bankMSP.member', 'courtMSP.member','inspectorMSP.member')"
+    directory: "./chaincodes/asset-chaincode"
+  - name: zone-cc
+    version: 0.0.3
+    lang: node
+    channel: main-channel
+    init: '{"Args":[]}'
+    endorsement: "OR('userMSP.member','landauthorityMSP.member', 'bankMSP.member', 'courtMSP.member','inspectorMSP.member')"
+    directory: "./chaincodes/zone-chaincode"
+  - name: verification-cc
+    version: 0.0.3
+    lang: node
+    channel: verification-channel
+    init: '{"Args":[]}'
+    endorsement: "OR('landauthorityMSP.member', 'bankMSP.member', 'courtMSP.member')"
+    directory: "./chaincodes/verification-chaincode"
+
+

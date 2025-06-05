@@ -1,0 +1,8 @@
+PeerOrgs:
+  - Name: landauthority
+    Domain: landauthority.realestate.com
+    Specs:
+    Template:
+      Count: 2
+    Users:
+      Count: 1

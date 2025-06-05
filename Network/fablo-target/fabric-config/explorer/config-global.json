@@ -1,0 +1,25 @@
+{
+  "network-configs": {
+    "network-user": {
+      "name": "Network of user",
+      "profile": "/opt/explorer/app/platform/fabric/connection-profile/connection-profile-user.json"
+    },
+    "network-bank": {
+      "name": "Network of bank",
+      "profile": "/opt/explorer/app/platform/fabric/connection-profile/connection-profile-bank.json"
+    },
+    "network-landauthority": {
+      "name": "Network of landauthority",
+      "profile": "/opt/explorer/app/platform/fabric/connection-profile/connection-profile-landauthority.json"
+    },
+    "network-court": {
+      "name": "Network of court",
+      "profile": "/opt/explorer/app/platform/fabric/connection-profile/connection-profile-court.json"
+    },
+    "network-inspector": {
+      "name": "Network of inspector",
+      "profile": "/opt/explorer/app/platform/fabric/connection-profile/connection-profile-inspector.json"
+    }
+  },
+  "license": "Apache-2.0"
+}

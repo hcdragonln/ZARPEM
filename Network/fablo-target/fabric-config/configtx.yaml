@@ -1,0 +1,333 @@
+################################################################################
+#   SECTION: Capabilities
+################################################################################
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+    Orderer: &OrdererCapabilities
+        V2_0: true
+    Application: &ApplicationCapabilities
+        V2_5: true
+
+################################################################################
+#   CHANNEL Defaults
+################################################################################
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ChannelCapabilities
+
+################################################################################
+#   Section: Organizations
+################################################################################
+Organizations:
+    - &Orderer1
+      Name: Orderer1MSP
+      ID: Orderer1MSP
+      MSPDir: crypto-config/peerOrganizations/orderer1.realestate.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('Orderer1MSP.member')"
+          Writers:
+              Type: Signature
+              Rule: "OR('Orderer1MSP.member')"
+          Admins:
+              Type: Signature
+              Rule: "OR('Orderer1MSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('Orderer1MSP.member')"
+
+      AnchorPeers:
+
+    - &user
+      Name: userMSP
+      ID: userMSP
+      MSPDir: crypto-config/peerOrganizations/user.realestate.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('userMSP.member')"
+          Writers:
+              Type: Signature
+              Rule: "OR('userMSP.member')"
+          Admins:
+              Type: Signature
+              Rule: "OR('userMSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('userMSP.member')"
+
+      AnchorPeers:
+          - Host: peer0.user.realestate.com
+            Port: 7041
+
+          - Host: peer1.user.realestate.com
+            Port: 7042
+
+    - &bank
+      Name: bankMSP
+      ID: bankMSP
+      MSPDir: crypto-config/peerOrganizations/bank.realestate.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('bankMSP.member')"
+          Writers:
+              Type: Signature
+              Rule: "OR('bankMSP.member')"
+          Admins:
+              Type: Signature
+              Rule: "OR('bankMSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('bankMSP.member')"
+
+      AnchorPeers:
+          - Host: peer0.bank.realestate.com
+            Port: 7061
+
+          - Host: peer1.bank.realestate.com
+            Port: 7062
+
+    - &landauthority
+      Name: landauthorityMSP
+      ID: landauthorityMSP
+      MSPDir: crypto-config/peerOrganizations/landauthority.realestate.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('landauthorityMSP.member')"
+          Writers:
+              Type: Signature
+              Rule: "OR('landauthorityMSP.member')"
+          Admins:
+              Type: Signature
+              Rule: "OR('landauthorityMSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('landauthorityMSP.member')"
+
+      AnchorPeers:
+          - Host: peer0.landauthority.realestate.com
+            Port: 7081
+
+          - Host: peer1.landauthority.realestate.com
+            Port: 7082
+
+    - &court
+      Name: courtMSP
+      ID: courtMSP
+      MSPDir: crypto-config/peerOrganizations/court.realestate.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('courtMSP.member')"
+          Writers:
+              Type: Signature
+              Rule: "OR('courtMSP.member')"
+          Admins:
+              Type: Signature
+              Rule: "OR('courtMSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('courtMSP.member')"
+
+      AnchorPeers:
+          - Host: peer0.court.realestate.com
+            Port: 7101
+
+          - Host: peer1.court.realestate.com
+            Port: 7102
+
+    - &inspector
+      Name: inspectorMSP
+      ID: inspectorMSP
+      MSPDir: crypto-config/peerOrganizations/inspector.realestate.com/msp
+
+      Policies:
+          Readers:
+              Type: Signature
+              Rule: "OR('inspectorMSP.member')"
+          Writers:
+              Type: Signature
+              Rule: "OR('inspectorMSP.member')"
+          Admins:
+              Type: Signature
+              Rule: "OR('inspectorMSP.admin')"
+          Endorsement:
+              Type: Signature
+              Rule: "OR('inspectorMSP.member')"
+
+      AnchorPeers:
+          - Host: peer0.inspector.realestate.com
+            Port: 7121
+
+          - Host: peer1.inspector.realestate.com
+            Port: 7122
+
+################################################################################
+#   SECTION: Application
+################################################################################
+Application: &ApplicationDefaults
+    Organizations:
+    # Policies defines the set of policies at this level of the config tree
+    # For Application policies, their canonical path is
+    #   /Channel/Application/<PolicyName>
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+################################################################################
+#   SECTION: Orderer
+################################################################################
+Orderer: &Group1Defaults
+    OrdererType: etcdraft
+    Addresses:
+        - orderer0.group1.orderer1.realestate.com:7030
+        - orderer1.group1.orderer1.realestate.com:7031
+        - orderer2.group1.orderer1.realestate.com:7032
+    EtcdRaft:
+        Consenters:
+            - Host: orderer0.group1.orderer1.realestate.com
+              Port: 7030
+              ClientTLSCert: crypto-config/peerOrganizations/orderer1.realestate.com/peers/orderer0.group1.orderer1.realestate.com/tls/server.crt
+              ServerTLSCert: crypto-config/peerOrganizations/orderer1.realestate.com/peers/orderer0.group1.orderer1.realestate.com/tls/server.crt
+
+            - Host: orderer1.group1.orderer1.realestate.com
+              Port: 7031
+              ClientTLSCert: crypto-config/peerOrganizations/orderer1.realestate.com/peers/orderer1.group1.orderer1.realestate.com/tls/server.crt
+              ServerTLSCert: crypto-config/peerOrganizations/orderer1.realestate.com/peers/orderer1.group1.orderer1.realestate.com/tls/server.crt
+
+            - Host: orderer2.group1.orderer1.realestate.com
+              Port: 7032
+              ClientTLSCert: crypto-config/peerOrganizations/orderer1.realestate.com/peers/orderer2.group1.orderer1.realestate.com/tls/server.crt
+              ServerTLSCert: crypto-config/peerOrganizations/orderer1.realestate.com/peers/orderer2.group1.orderer1.realestate.com/tls/server.crt
+
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    Organizations:
+    # Policies defines the set of policies at this level of the config tree
+    # For Orderer policies, their canonical path is
+    #   /Channel/Orderer/<PolicyName>
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        # BlockValidation specifies what signatures must be included in the block
+        # from the orderer for the peer to validate it.
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+    Capabilities:
+        <<: *OrdererCapabilities
+
+################################################################################
+#   Profile
+################################################################################
+# https://github:com/hyperledger/fabric/blob/master/sampleconfig/configtx.yaml
+
+Profiles:
+    # Profile used to create Genesis block for group group1 #
+    Group1Genesis:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *Group1Defaults
+            Organizations:
+                - *Orderer1
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Orderer1
+                    - *user
+                    - *bank
+                    - *landauthority
+                    - *court
+                    - *inspector
+
+    # Profile used to create channeltx for main-channel #
+    MainChannel:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *Group1Defaults
+            Organizations:
+                - *Orderer1
+            Capabilities:
+                <<: *ApplicationCapabilities
+        Consortium: SampleConsortium
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *user
+                    - *bank
+                    - *landauthority
+                    - *court
+                    - *inspector
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *user
+                - *bank
+                - *landauthority
+                - *court
+                - *inspector
+    # Profile used to create channeltx for verification-channel #
+    VerificationChannel:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *Group1Defaults
+            Organizations:
+                - *Orderer1
+            Capabilities:
+                <<: *ApplicationCapabilities
+        Consortium: SampleConsortium
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *bank
+                    - *landauthority
+                    - *court
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *bank
+                - *landauthority
+                - *court

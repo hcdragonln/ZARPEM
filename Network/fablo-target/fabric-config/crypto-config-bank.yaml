@@ -1,0 +1,8 @@
+PeerOrgs:
+  - Name: bank
+    Domain: bank.realestate.com
+    Specs:
+    Template:
+      Count: 2
+    Users:
+      Count: 1

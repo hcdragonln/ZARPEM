@@ -1,0 +1,8 @@
+PeerOrgs:
+  - Name: court
+    Domain: court.realestate.com
+    Specs:
+    Template:
+      Count: 2
+    Users:
+      Count: 1
