@@ -33,9 +33,10 @@ echo "7. Export verification key..."
 snarkjs zkey export verificationkey ${PHASE2_ZKEY} verification_key.json
 
 echo "8. Generate proof..."
-snarkjs groth16 prove ${PHASE2_ZKEY} witness.wtns proof.json public.json
+mkdir -p ../../proof
+snarkjs groth16 prove ${PHASE2_ZKEY} witness.wtns ../../proof/proof.json ../../proof/public.json
 
 echo "9. Verify proof..."
-snarkjs groth16 verify verification_key.json public.json proof.json
+snarkjs groth16 verify verification_key.json ../../proof/public.json ../../proof/proof.json
 
 echo "All steps completed successfully."
