@@ -1,0 +1,5 @@
+#Network fablo
+Network/fablo-target
+#node modules
+ZK-snarks_ECDSA/node_modules
+ZK-snarks_ECDSA/scripts/AssetOwnerMerkle/*.zkey
